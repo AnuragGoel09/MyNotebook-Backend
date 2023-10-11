@@ -3,6 +3,7 @@ const router=express.Router();
 const User=require('../models/User');
 const bcrypt=require('bcryptjs');
 const jwt=require('jsonwebtoken');
+const fetchuser = require('../middleware/fetchUser');
 const JWT_SECRET="MyNotebook";
 
 // Create a User using: POST "/api/auth/" . Doesn't require auth
@@ -44,10 +45,14 @@ router.post('/login',async (req,res)=>{
     const {email,password}=req.body;
     try {
         let user=await User.findOne({email});
+        
+        // if user not exist
         if(!user){
             return res.status(400).json({error:"Invalid Credentials"});
         }   
         const passwordCompare=bcrypt.compare(password,user.password);
+        
+        // if password mismatch
         if(!passwordCompare){
             return res.status(400).json({error:"Invalid Credentials"});
         }
@@ -63,4 +68,17 @@ router.post('/login',async (req,res)=>{
         return res.status(500).send("Some Error Occured");
     }
 });
+
+// Get loggedin User Details using POST "/api/auth/getuser" . Login Required ( need authtoken )
+router.post('/getuser',fetchuser,async (req,res)=>{
+    try {
+        const userid=req.user.id;
+        const user=await User.findById(userid).select("-password");
+        res.json(user);
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).send("Internal Server Error");
+    }
+})
+
 module.exports=router
