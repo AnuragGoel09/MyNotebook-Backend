@@ -1,7 +1,11 @@
 const mongoose=require('mongoose')
-import { Schema } from 'mongoose'
+const Schema=mongoose.Schema
 
 const TextSchema=new Schema({
+    user:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref: 'user'
+    },
     title:{
         type:String,
         default:"Untitled"
@@ -9,5 +13,9 @@ const TextSchema=new Schema({
     desc:{
         type:String,
     },
+    date:{
+        type:Date,
+        default:Date.now
+    }
 });
 module.exports=mongoose.model('note',TextSchema)
