@@ -2,6 +2,7 @@ const connectToMongo=require('./db')
 const express = require('express')
 const UserRoute=require('./routes/auth.js')
 const NotesRoute=require('./routes/note.js')
+const CheckListRoute=require('./routes/checklist.js')
 connectToMongo();
 
 const app = express()
@@ -10,6 +11,7 @@ app.use(express.json())
 
 app.use('/api/auth',UserRoute)
 app.use('/api/notes',NotesRoute)
+app.use('/api/lists',CheckListRoute)
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
