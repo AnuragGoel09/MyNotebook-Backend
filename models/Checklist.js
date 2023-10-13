@@ -2,9 +2,9 @@ const mongoose=require('mongoose')
 const Schema=mongoose.Schema
 
 const ChecklistSchema=new Schema({
-    user:{
+    notebook:{
         type:mongoose.Schema.Types.ObjectId,
-        ref: 'user'
+        ref: 'notebook'
     },
     title:{
         type:String,

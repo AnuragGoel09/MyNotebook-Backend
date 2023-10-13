@@ -4,10 +4,10 @@ const fetchuser=require('../middleware/fetchUser')
 const Notes=require('../models/Text');
 
 // Get all the notes using GET "/api/notes/fetchallnotes"
-router.get('/fetchallnotes',fetchuser,async(req,res)=>{
+router.get('/fetchallnotes/:id',fetchuser,async(req,res)=>{
 
     try {
-        const notes= await Notes.find({user:req.user.id});
+        const notes= await Notes.find({notebook:req.params.id});
         res.json(notes);
     } catch (error) {
         res.status(500).send({error:"Internal Server Error"});
@@ -15,10 +15,10 @@ router.get('/fetchallnotes',fetchuser,async(req,res)=>{
 });
 
 // All notes for loggedin users using PORT : "/api/notes/addnote"
-router.post('/addnote',fetchuser,async(req,res)=>{
+router.post('/addnote/:id',fetchuser,async(req,res)=>{
     try {
         const {title,desc}=req.body;
-        const note=new Notes({title,desc,user:req.user.id});
+        const note=new Notes({title,desc,notebook:req.params.id});
         const savedNote= await note.save();
         res.send(savedNote);
     } catch (error) {

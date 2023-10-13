@@ -1,16 +1,16 @@
 const mongoose=require('mongoose')
 const Schema=mongoose.Schema
 
-const TextSchema=new Schema({
-    notebook:{
+const NotebookSchema=new Schema({
+    user:{
         type:mongoose.Schema.Types.ObjectId,
-        ref: 'notebook'
+        ref: 'user'
     },
     title:{
         type:String,
-        default:"Untitled"
+        default:"New Notebook"
     },
-    desc:{
+    image:{
         type:String,
     },
     date:{
@@ -18,4 +18,4 @@ const TextSchema=new Schema({
         default:Date.now
     }
 });
-module.exports=mongoose.model('note',TextSchema)
+module.exports=mongoose.model('notebook',NotebookSchema)

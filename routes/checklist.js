@@ -4,10 +4,10 @@ const fetchuser=require('../middleware/fetchUser')
 const checklist=require('../models/Checklist');
 
 // Get all the notes using GET "/api/notes/fetchallnotes"
-router.get('/fetchalllist',fetchuser,async(req,res)=>{
+router.get('/fetchalllist/:id',fetchuser,async(req,res)=>{
 
     try {
-        const list= await checklist.find({user:req.user.id});
+        const list= await checklist.find({notebook:req.params.id});
         res.json(list);
     } catch (error) {
         res.status(500).send({error:"Internal Server Error"});
@@ -15,10 +15,10 @@ router.get('/fetchalllist',fetchuser,async(req,res)=>{
 });
 
 // All notes for loggedin users using PORT : "/api/notes/addnote"
-router.post('/addlist',fetchuser,async(req,res)=>{
+router.post('/addlist/:id',fetchuser,async(req,res)=>{
     try {
         const {title,list}=req.body;
-        const newList=new checklist({title,list,user:req.user.id});
+        const newList=new checklist({title,list,notebook:req.params.id});
         const savedList= await newList.save();
         res.send(savedList);
     } catch (error) {
