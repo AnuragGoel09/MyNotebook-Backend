@@ -5,14 +5,24 @@ const bcrypt=require('bcryptjs');
 const jwt=require('jsonwebtoken');
 const fetchuser = require('../middleware/fetchUser');
 const JWT_SECRET="MyNotebook";
+const {body,validationResult}=require('express-validator');
 
 // Create a User using: POST "/api/auth/" . Doesn't require auth
-router.post('/createuser',async(req,res)=>{
+router.post('/createuser',[
+    body('email').isEmail(),
+    body('name').isLength({min:1}),
+    body('password').isLength({min:1})
+],async(req,res)=>{
     try {
+        const result = validationResult(req);
+        if (!result.isEmpty()) {
+            return res.json({error:"Invalid Credentials"});
+        }
         // Check whether user email exists already
         let user = await User.findOne({email:req.body.email});
+        console.log(user)
         if(user){
-            return res.status(400).json({error:"Email already exist"})
+            return res.json({error:"Email already exist"})
         }
 
         const salt=await bcrypt.genSalt(10);
@@ -40,11 +50,18 @@ router.post('/createuser',async(req,res)=>{
 
 
 // Authenticate a User using POST "/api/auth/login"
-router.post('/login',async (req,res)=>{
+router.post('/login',[
+    body('email').isEmail(),
+    body('password').isLength({min:1})
+],async (req,res)=>{
     
     const {email,password}=req.body;
     // console.log(req.body);
     try {
+        const result = validationResult(req);
+        if (!result.isEmpty()) {
+            return res.json({error:"Invalid Credentials"});
+        }
         let user=await User.findOne({email});
         
         // if user not exist
