@@ -17,8 +17,7 @@ router.get('/fetchalllist/:id',fetchuser,async(req,res)=>{
 // All notes for loggedin users using PORT : "/api/notes/addnote"
 router.post('/addlist/:id',fetchuser,async(req,res)=>{
     try {
-        const {title,list}=req.body;
-        const newList=new checklist({title,list,notebook:req.params.id});
+        const newList=new checklist({notebook:req.params.id,user:req.user.id});
         const savedList= await newList.save();
         res.send(savedList);
     } catch (error) {

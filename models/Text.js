@@ -2,6 +2,10 @@ const mongoose=require('mongoose')
 const Schema=mongoose.Schema
 
 const TextSchema=new Schema({
+    user:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref: 'user'
+    },
     notebook:{
         type:mongoose.Schema.Types.ObjectId,
         ref: 'notebook'
@@ -12,6 +16,7 @@ const TextSchema=new Schema({
     },
     desc:{
         type:String,
+        default:""
     },
     date:{
         type:Date,

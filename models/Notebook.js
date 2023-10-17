@@ -12,6 +12,7 @@ const NotebookSchema=new Schema({
     },
     image:{
         type:String,
+        default:"./notebook-cover/pattern1.jpg"
     },
     date:{
         type:Date,

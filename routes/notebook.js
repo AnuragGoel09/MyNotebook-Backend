@@ -17,8 +17,8 @@ router.get('/fetchallnotebooks',fetchuser,async(req,res)=>{
 // Add notebook for loggedin users using PORT : "/api/notes/addnote"
 router.post('/addnotebook',fetchuser,async(req,res)=>{
     try {
-        const {title,image}=req.body;
-        const note=new Notebook({title,image,user:req.user.id});
+        // const {title,image}=req.body;
+        const note=new Notebook({user:req.user.id});
         const savedNotebook= await note.save();
         res.send(savedNotebook);
     } catch (error) {
@@ -61,7 +61,7 @@ router.delete('/deletenotebook/:id',fetchuser,async(req,res)=>{
     try {
         // find the note to be deleted
         let notebook= await Notebook.findById(req.params.id);
-        
+        console.log(notebook)
         // if note not exist
         if(!notebook){
             res.status(303).send("Not Found");    

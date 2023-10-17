@@ -17,8 +17,7 @@ router.get('/fetchallnotes/:id',fetchuser,async(req,res)=>{
 // All notes for loggedin users using PORT : "/api/notes/addnote"
 router.post('/addnote/:id',fetchuser,async(req,res)=>{
     try {
-        const {title,desc}=req.body;
-        const note=new Notes({title,desc,notebook:req.params.id});
+        const note=new Notes({notebook:req.params.id,user:req.user.id});
         const savedNote= await note.save();
         res.send(savedNote);
     } catch (error) {
@@ -42,10 +41,11 @@ router.put('/updatenote/:id',fetchuser,async (req,res)=>{
         if(!note){
             res.status(303).send("Not Found");    
         }
-        
+        // console.log(note)
+        // console.log(req.body)
         // if some other user accessing the note
         if(note.user.toString()!==req.user.id){
-            return res.status(401).send("Not Allowed")
+            return res.status(401).send({error:"Not Allowed"})
         }
         note = await Notes.findByIdAndUpdate(req.params.id,{$set:newNote},{new:true});
         res.json(note);

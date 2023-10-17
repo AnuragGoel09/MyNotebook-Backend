@@ -43,18 +43,18 @@ router.post('/createuser',async(req,res)=>{
 router.post('/login',async (req,res)=>{
     
     const {email,password}=req.body;
+    // console.log(req.body);
     try {
         let user=await User.findOne({email});
         
         // if user not exist
         if(!user){
-            return res.status(400).json({error:"Invalid Credentials"});
+            return res.json({error:"Invalid Credentials"});
         }   
-        const passwordCompare=bcrypt.compare(password,user.password);
-        
+        const passwordCompare= await bcrypt.compare(password,user.password);
         // if password mismatch
         if(!passwordCompare){
-            return res.status(400).json({error:"Invalid Credentials"});
+            return res.json({error:"Invalid Credentials"});
         }
         const payload={
             user:{
@@ -62,10 +62,10 @@ router.post('/login',async (req,res)=>{
             }
         }
         const authtoken=jwt.sign(payload,JWT_SECRET);
-        return res.json({authtoken});
+        res.json({authtoken});
 
     } catch (error) {
-        return res.status(500).send("Some Error Occured");
+        res.status(500).send("Internal Server Error");
     }
 });
 
