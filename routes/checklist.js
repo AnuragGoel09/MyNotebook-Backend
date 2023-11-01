@@ -4,6 +4,18 @@ const fetchuser=require('../middleware/fetchUser')
 const checklist=require('../models/Checklist');
 
 // Get all the notes using GET "/api/notes/fetchallnotes"
+router.get('/alllists',fetchuser,async(req,res)=>{
+
+    try {
+        const list= await checklist.find({user:req.user.id});
+        res.json(list);
+    } catch (error) {
+        res.status(500).send({error:"Internal Server Error"});
+    }
+});
+
+
+// Get all the notes using GET "/api/notes/fetchallnotes"
 router.get('/fetchalllist/:id',fetchuser,async(req,res)=>{
 
     try {
@@ -29,10 +41,10 @@ router.post('/addlist/:id',fetchuser,async(req,res)=>{
 // Update note for loggedin users using PUT : "/api/notes/updatenote"
 router.put('/updatelist/:id',fetchuser,async (req,res)=>{
     try {
-        const {title,list}=req.body;
+        const {title,list,bgcolor,fontcolor}=req.body;
 
         // Create a newNote
-        const newList={title,list};
+        const newList={title,list,bgcolor,fontcolor};
         
         // find the note to be updated
         let findlist= await checklist.findById(req.params.id);

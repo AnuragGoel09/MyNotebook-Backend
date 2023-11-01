@@ -3,6 +3,15 @@ const router=express.Router()
 const fetchuser=require('../middleware/fetchUser')
 const Notes=require('../models/Text');
 
+router.get('/allnotes',fetchuser,async(req,res)=>{
+    try {
+        const notes= await Notes.find({user:req.user.id});
+        res.json(notes);
+    } catch (error) {
+        res.status(500).send({error:"Internal Server Error"});
+    }
+})
+
 // Get all the notes using GET "/api/notes/fetchallnotes"
 router.get('/fetchallnotes/:id',fetchuser,async(req,res)=>{
 
@@ -29,10 +38,10 @@ router.post('/addnote/:id',fetchuser,async(req,res)=>{
 // Update note for loggedin users using PUT : "/api/notes/updatenote"
 router.put('/updatenote/:id',fetchuser,async (req,res)=>{
     try {
-        const {title,desc}=req.body;
+        const {title,desc,bgcolor,fontcolor}=req.body;
 
         // Create a newNote
-        const newNote={title,desc};
+        const newNote={title,desc,bgcolor,fontcolor};
         
         // find the note to be updated
         let note= await Notes.findById(req.params.id);

@@ -15,5 +15,5 @@ app.use('/api/notes',NotesRoute)
 app.use('/api/lists',CheckListRoute)
 app.use('/api/notebooks',NotebookRoute)
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`Server Running porperly`)
 })

@@ -2,6 +2,8 @@ const express=require('express')
 const router=express.Router()
 const fetchuser=require('../middleware/fetchUser')
 const Notebook=require('../models/Notebook')
+const Notes=require('../models/Text');
+const checklist=require('../models/Checklist');
 
 // Get all the notebooks using GET "/api/notes/fetchallnotes"
 router.get('/fetchallnotebooks',fetchuser,async(req,res)=>{
@@ -71,7 +73,16 @@ router.delete('/deletenotebook/:id',fetchuser,async(req,res)=>{
         if(notebook.user.toString()!==req.user.id){
             return res.status(401).send("Not Allowed")
         }
+        let notes=await Notes.find({notebook:req.params.id});
+        let checklists=await checklist.find({notebook:req.params.id});
+        notes.map(async(note)=>{
+            note=await Notes.findByIdAndDelete(note._id);
+        })
+        checklists.map(async(list)=>{
+            list=await checklist.findByIdAndDelete(list._id);
+        })
         notebook = await Notebook.findByIdAndDelete(req.params.id)
+        console.log(notes)
         res.json({"success":"Note has been deleted"});
 
     } catch (error) {

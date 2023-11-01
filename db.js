@@ -4,7 +4,7 @@ const mongoURI="mongodb+srv://goelanurag2003:Goel%402003@cluster0.i685o29.mongod
 const connectToMongo=()=>{
     try {
         mongoose.connect(mongoURI)
-        console.log("Mongo Connected Successfully")
+        console.log("MongoDB Database Connected Successfully")
     } catch (error) {
         console.log(error)        
     }

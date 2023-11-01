@@ -18,6 +18,14 @@ const TextSchema=new Schema({
         type:String,
         default:""
     },
+    bgcolor:{
+        type:String,
+        default:"blue"
+    },
+    fontcolor:{
+        type:String,
+        default:"white"
+    },
     date:{
         type:Date,
         default:Date.now

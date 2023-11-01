@@ -17,6 +17,14 @@ const ChecklistSchema=new Schema({
     list:{
         type:Array,
     },
+    bgcolor:{
+        type:String,
+        default:"purple"
+    },
+    fontcolor:{
+        type:String,
+        default:"white"
+    },
     date:{
         type:Date,
         default:Date.now
